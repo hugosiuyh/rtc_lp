@@ -11,9 +11,52 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   if (Platform.OS === 'web') {
-    // Render the index screen directly on the web
-    return <IndexScreen />;
+    return (
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          headerShown: false,
+        }}
+      >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          ),
+        }}></Tabs.Screen>
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: 'Profile',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="venue"
+          options={{
+            title: 'Venue',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            ),
+          }}
+        />
+      <Tabs.Screen
+      name="reviewform"
+      options={{
+        title: 'ReviewForm',
+        tabBarIcon: ({ color, focused }) => (
+          <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+        ),
+      }}
+    />
+  </Tabs>
+    );
   }
+  
 
   return (
     <Tabs
@@ -31,9 +74,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: 'Explore',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),

@@ -2,14 +2,23 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext'; // Assuming you have an AuthContext setup
 
-const LoginScreen: React.FC = () => {
+const LoginScreen: React.FC<{ setModalVisible: (visible: boolean) => void }> = ({ setModalVisible }) => {
   const { signInWithGoogle } = useAuth();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      setModalVisible(false); // Close the modal after successful login
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sign in with email</Text>
 
-      <TouchableOpacity style={styles.button} onPress={signInWithGoogle}>
+      <TouchableOpacity style={styles.button} onPress={handleGoogleSignIn}>
         <Text style={styles.buttonText}>Sign in with Google</Text>
       </TouchableOpacity>
 

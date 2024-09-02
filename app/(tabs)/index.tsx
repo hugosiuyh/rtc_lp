@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Modal, Linking, TextInput } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, View, Image, TextInput, TouchableOpacity, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import LoginScreen from '@/components/Login'; // Import the LoginScreen component
-import { AuthProvider } from '../../context/AuthContext';
+import Header from '../../components/Header'
 
 const IndexScreen: React.FC = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-
   return (
-    <AuthProvider>
+    
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      <View style={styles.header}>
-        <Image
-          source={require('@/assets/images/logo.png')}
-          style={styles.logo}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={() => setModalVisible(true)}>
-          <ThemedText style={styles.loginButtonText}>Login</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <Header></Header>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.searchContainer}>
           <Image
@@ -65,30 +53,7 @@ const IndexScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
-
-      {/* Modal for Login */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <LoginScreen /> {/* Render the LoginScreen component */}
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <ThemedText style={styles.buttonText}>Close</ThemedText>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
-    </AuthProvider>
   );
 };
 
@@ -105,28 +70,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#d1d1d1',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#16213e',
-  },
-  logo: {
-    width: 120,
-    height: 40,
-    resizeMode: 'contain',
-  },
-  loginButton: {
-    backgroundColor: '#4a4e69',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-  },
-  loginButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
   scrollContent: {
     paddingTop: 0,
@@ -202,43 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: 'white',
   },
-  // Modal styles
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  modalInput: {
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    backgroundColor: '#f1f1f1',
-    marginBottom: 15,
-    fontSize: 16,
-    color: '#333',
-  },
-  closeButton: {
-    backgroundColor: '#4a4e69',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
 });
 
-
 export default IndexScreen;
-
