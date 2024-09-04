@@ -4,6 +4,7 @@ import pandas as pd
 from google.cloud import firestore
 from google.oauth2 import service_account
 from openai import OpenAI
+from datetime import datetime
 
 # Load environment variables from .env
 from dotenv import load_dotenv
@@ -25,7 +26,7 @@ def generate_summary(venue_name, reviews):
     try:
         client = OpenAI()
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4",
             messages=[
             {"role": "system", "content": prompt}
             ]
@@ -78,28 +79,26 @@ def save_venue_to_firestore(venue_data):
         print(f"Error adding venue '{venue_data['name']}' to Firestore: {e}")
         return None
 
-# Function to process reviews from csv2, generate a summary, and store reviews in Firestore, linking each review to the correct venue_id
+# Function to process reviews from csv2, generate a summary, and store reviews in Firestore under the venue's sub-collection
 def process_reviews(csv_file, venue_mapping):
     # Read the CSV file
     df = pd.read_csv(csv_file)
 
     # Ensure the CSV contains the required columns
-    if 'place_name' not in df.columns or 'review_text' not in df.columns:
-        raise ValueError("CSV must contain 'venue_name' and 'review_text' columns.")
+    if 'place_name' not in df.columns or 'review_text' not in df.columns or 'published_at_date' not in df.columns:
+        raise ValueError("CSV must contain 'place_name', 'review_text', and 'published_at_date' columns.")
 
-    # Group reviews by venue_name
+    # Group reviews by place_name, aggregate review_text and published_at_date as lists
     grouped_reviews = df.groupby('place_name').agg({
-    'review_text': list,
-    'published_at_date': list
-}).reset_index()
-
+        'review_text': list,
+        'published_at_date': list
+    }).reset_index()
 
     # Add each review to the reviews collection in Firestore, associating it with a venue_id and generating summaries
     for _, row in grouped_reviews.iterrows():
-        print(row)
         venue_name = row['place_name']
         reviews = row['review_text']
-        dates = row['published_at_date']
+        dates = row['published_at_date']  # This will be a list of dates
 
         # Get venue_id from the mapping
         venue_id = venue_mapping.get(venue_name)
@@ -113,23 +112,23 @@ def process_reviews(csv_file, venue_mapping):
                 # Save the summary to the venue document in the `venues` collection
                 save_summary_to_venue(venue_id, summary)
 
-            # Save individual reviews to the `reviews` collection
-            for review, date in zip(reviews, dates):
-                save_review_to_firestore(venue_id, review, date)
+            # Save individual reviews to the `reviews` sub-collection under each venue
+            for review_text, published_at_date in zip(reviews, dates):
+                review_id = f"{published_at_date}_{venue_id}"  # Prefix review document ID with date
+                save_review_to_subcollection(venue_id, review_id, review_text, published_at_date)
         else:
             print(f"Venue '{venue_name}' not found. Skipping reviews.")
 
-# Function to save individual reviews to Firestore
-def save_review_to_firestore(venue_id, review_text, date):
+# Function to save individual reviews under the venue's sub-collection
+def save_review_to_subcollection(venue_id, review_id, review_text, published_at_date):
     try:
-        db.collection('reviews').add({
-            'venue_id': venue_id,
-            'review_text': review_text, 
-            'date' : date,
+        db.collection('venues').document(venue_id).collection('reviews').document(review_id).set({
+            'review_text': review_text,
+            'published_at_date': published_at_date,
         })
-        print(f"Review for venue '{venue_id}' added to Firestore.")
+        print(f"Review '{review_id}' for venue '{venue_id}' added to Firestore.")
     except Exception as e:
-        print(f"Error adding review for venue '{venue_id}' to Firestore: {e}")
+        print(f"Error adding review '{review_id}' for venue '{venue_id}' to Firestore: {e}")
 
 # Function to save the summary to the venue in Firestore
 def save_summary_to_venue(venue_id, summary):
