@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { auth, provider, db } from '../firebaseConfig';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore'; // Added getDoc
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AuthContextProps {
@@ -52,16 +52,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const result = await signInWithPopup(auth, provider);
       const loggedInUser = result.user;
 
-      // Save or update user data in Firestore
+      // Check if the user document exists
       const userDocRef = doc(db, 'users', loggedInUser.uid);
-      await setDoc(userDocRef, {
-        uid: loggedInUser.uid,
-        email: loggedInUser.email,
-        displayName: loggedInUser.displayName,
-        photoURL: loggedInUser.photoURL,
-        phoneNumber: loggedInUser.phoneNumber,
-        lastLogin: serverTimestamp(),
-      }, { merge: true });
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (!userDocSnap.exists()) {
+        // Create the user document if it doesn't exist
+        await setDoc(userDocRef, {
+          uid: loggedInUser.uid,
+          email: loggedInUser.email,
+          displayName: loggedInUser.displayName,
+          photoURL: loggedInUser.photoURL,
+          phoneNumber: loggedInUser.phoneNumber,
+          createdAt: serverTimestamp(), // Store the creation time
+          lastLogin: serverTimestamp(), // Store the login time
+        });
+        console.log('User document created:', loggedInUser.uid);
+      } else {
+        // Update the last login timestamp if the document already exists
+        await setDoc(userDocRef, {
+          lastLogin: serverTimestamp(),
+        }, { merge: true });
+        console.log('User document updated with last login:', loggedInUser.uid);
+      }
 
       setUser(loggedInUser);
       await AsyncStorage.setItem('user', JSON.stringify(loggedInUser));

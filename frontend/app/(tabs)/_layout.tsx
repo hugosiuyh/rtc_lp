@@ -53,6 +53,14 @@ export default function TabLayout() {
         ),
       }}
     />
+     <Tabs.Screen
+        name="spotify"
+        options={{
+          title: 'Spotify',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+          ),
+        }}></Tabs.Screen>
   </Tabs>
     );
   }

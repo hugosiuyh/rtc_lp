@@ -38,7 +38,23 @@ def generate_summary(venue_name, reviews):
         print(f"Error generating summary for venue '{venue_name}': {e}")
         return None
 
-# Function to process venues from csv1 and store them in Firestore, returning a mapping of venue_name -> document_id (venue_id)
+# Function to query Firestore and retrieve the venue_id based on venue_name
+def get_venue_id_by_name(venue_name):
+    try:
+        venue_ref = db.collection('venues').where('name', '==', venue_name).limit(1).stream()
+
+        # Retrieve the first matching document (if any)
+        for venue in venue_ref:
+            print(f"Venue '{venue_name}' found with ID: {venue.id}")
+            return venue.id  # Return the venue's Firestore document ID (venue_id)
+
+        print(f"Venue '{venue_name}' not found in Firestore.")
+        return None
+    except Exception as e:
+        print(f"Error querying venue '{venue_name}' from Firestore: {e}")
+        return None
+
+# Function to process venues from csv1 and add them to Firestore if they don't exist
 def process_venues(csv_file):
     # Read the CSV file
     df = pd.read_csv(csv_file)
@@ -48,25 +64,22 @@ def process_venues(csv_file):
     if not all(column in df.columns for column in required_columns):
         raise ValueError(f"CSV must contain the following columns: {', '.join(required_columns)}")
 
-    # Map to store venue_name -> document_id (venue_id)
-    venue_mapping = {}
-
     # Add each venue to the venues collection in Firestore
     for _, row in df.iterrows():
+        venue_name = row['name']
         venue_data = {
             'name': row['name'],
             'category': row['main_category'],
             'address': row['address'],
             'link': row['link'],
         }
-        print(f"Adding venue '{row['name']}' to Firestore...")
 
-        # Save venue and get document_id (venue_id)
-        venue_id = save_venue_to_firestore(venue_data)
-        if venue_id:
-            venue_mapping[row['name']] = venue_id
+        # Query Firestore to see if the venue already exists
+        venue_id = get_venue_id_by_name(venue_name)
 
-    return venue_mapping
+        if not venue_id:
+            # Venue doesn't exist, add it to Firestore
+            venue_id = save_venue_to_firestore(venue_data)
 
 # Function to save a venue to Firestore and return the document_id
 def save_venue_to_firestore(venue_data):
@@ -80,7 +93,7 @@ def save_venue_to_firestore(venue_data):
         return None
 
 # Function to process reviews from csv2, generate a summary, and store reviews in Firestore under the venue's sub-collection
-def process_reviews(csv_file, venue_mapping):
+def process_reviews(csv_file):
     # Read the CSV file
     df = pd.read_csv(csv_file)
 
@@ -100,8 +113,8 @@ def process_reviews(csv_file, venue_mapping):
         reviews = row['review_text']
         dates = row['published_at_date']  # This will be a list of dates
 
-        # Get venue_id from the mapping
-        venue_id = venue_mapping.get(venue_name)
+        # Query Firestore to get the venue_id using the venue's name
+        venue_id = get_venue_id_by_name(venue_name)
 
         if venue_id:
             print(f"Generating summary for venue '{venue_name}' (ID: {venue_id})...")
@@ -145,8 +158,8 @@ if __name__ == "__main__":
     venues_csv_file = 'venue_overview.csv'  # Replace with your actual CSV1 file path
     reviews_csv_file = 'venue_review.csv'  # Replace with your actual CSV2 file path
 
-    # Step 1: Process venues from csv1 and get the venue_name -> document_id (venue_id) mapping
-    venue_mapping = process_venues(venues_csv_file)
+    # Step 1: Process venues from csv1 and add them to Firestore if they don't exist
+    process_venues(venues_csv_file)
 
     # Step 2: Process reviews from csv2, associating each review with the correct venue_id and generating summaries
-    process_reviews(reviews_csv_file, venue_mapping)
+    process_reviews(reviews_csv_file)
