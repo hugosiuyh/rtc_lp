@@ -6,6 +6,10 @@ const axios = require("axios");
 admin.initializeApp();
 const db = admin.firestore();
 
+const CLIENT_ID = functions.config().spotify.client_id;
+const CLIENT_SECRET = functions.config().spotify.client_secret;
+const REDIRECT_URI = functions.config().spotify.redirect_uri;
+
 // Function to exchange authorization code for an access token
 exports.exchangeCodeForToken = functions.https.onCall(async (data, context) => {
   const {code} = data;
@@ -182,4 +186,42 @@ exports.fetchSpotifyData = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError(
         "internal", "Failed to fetch Spotify data.");
   }
+});
+
+
+// Function to get user summary
+exports.getUserSummary = functions.https.onCall(async (data, context) => {
+  const userId = context.auth.uid;
+
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+        "unauthenticated", "User must be authenticated.");
+  }
+
+  // Fetch the user's Spotify summary from Firestore
+  const spotifyDataRef = db.collection(
+      "users").doc(userId).collection("spotifyData");
+  const topTracksDoc = await spotifyDataRef.doc("topTracks").get();
+  const audioFeaturesDoc = await spotifyDataRef.doc("audioFeatures").get();
+  const topGenresDoc = await spotifyDataRef.doc("topGenres").get();
+  const featurePercentagesDoc = await spotifyDataRef.doc(
+      "featurePercentages").get();
+
+  if (!topTracksDoc.exists || !audioFeaturesDoc.exists |
+     !topGenresDoc.exists || !featurePercentagesDoc.exists) {
+    throw new functions.https.HttpsError(
+        "not-found", "User's Spotify data not found.");
+  }
+
+  const topTracks = topTracksDoc.data();
+  const audioFeatures = audioFeaturesDoc.data();
+  const topGenres = topGenresDoc.data();
+  const featurePercentages = featurePercentagesDoc.data();
+
+  return {
+    topTracks,
+    audioFeatures,
+    topGenres,
+    featurePercentages,
+  };
 });

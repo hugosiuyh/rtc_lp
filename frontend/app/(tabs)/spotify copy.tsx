@@ -5,13 +5,13 @@ import { Button, View, Text, TextInput, StyleSheet } from 'react-native';
 import { httpsCallable } from 'firebase/functions'; // Firebase functions
 import { auth, db, functions } from '../../firebaseConfig'; // Firebase config (initialize Firebase)
 import { doc, getDoc } from 'firebase/firestore'; // Firestore methods
-import Constants from 'expo-constants'; // Import expo-constants to access environment variables
+import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '@env';
 
 WebBrowser.maybeCompleteAuthSession();
 
 // Access environment variables from expo-constants
-const CLIENT_ID = Constants.extra.SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = Constants.extra.SPOTIFY_REDIRECT_URI;
+const CLIENT_ID = SPOTIFY_CLIENT_ID;
+const REDIRECT_URI = SPOTIFY_REDIRECT_URI;
 
 const discovery = {
   authorizationEndpoint: 'https://accounts.spotify.com/authorize',
