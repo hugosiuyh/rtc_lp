@@ -9,8 +9,8 @@ import { doc, getDoc } from 'firebase/firestore'; // Firestore methods
 WebBrowser.maybeCompleteAuthSession();
 
 // Access environment variables from expo-constants
-const CLIENT_ID = 'SPOTIFY_CLIENT_ID';
-const REDIRECT_URI = 'SPOTIFY_REDIRECT_URI';
+const CLIENT_ID = 'e0b1a29a354d4b6eb6e7dbfb22989d43';
+const REDIRECT_URI = 'localhost:8081/spotify';
 
 const discovery = {
   authorizationEndpoint: 'https://accounts.spotify.com/authorize',

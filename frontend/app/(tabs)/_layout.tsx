@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import IndexScreen from './index'; // Adjust the path as needed
 import { Tabs } from 'expo-router';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/styles/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {

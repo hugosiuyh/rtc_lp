@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, Alert } from 'react-native';
-import Header from '@/components/Header'; // Reuse the Header component
+// import Header from '@/components/Header'; // Reuse the Header component
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext'; // Adjust the import path accordingly
 
@@ -23,7 +23,7 @@ const ProfileScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Header />
+        {/* <Header /> */}
         <Text style={styles.title}>Profile</Text>
         
         {/* Display User Email */}
