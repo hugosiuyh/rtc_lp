@@ -1,12 +1,15 @@
 // src/components/Header.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { theme, globalStyles } from '../../styles/theme';
 
 const Header = () => (
   <View style={styles.container}>
+    <Image
+      source={require('@/assets/images/logo.png')}
+      style={styles.logo}
+    />
     <Text style={styles.nowPlaying}>NOW PLAYING</Text>
-    <Text style={styles.songTitle}>Midnight City - M83</Text>
   </View>
 );
 
@@ -28,6 +31,11 @@ const styles = StyleSheet.create({
     ...globalStyles.text,
     fontSize: theme.fontSizes.medium,
     fontFamily: theme.fonts.bold,
+  },
+    logo: {
+    width: 120,
+    height: 40,
+    resizeMode: 'contain',
   },
 });
 

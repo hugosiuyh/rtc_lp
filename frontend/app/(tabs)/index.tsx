@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme, globalStyles } from '../../styles/theme';
 import Sidebar from '../../components/SideBar/SideBar';
-// import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/SearchBar';
 import GenreButtons from '../../components/profile/GenreButtons';
 import ClubSection from '../../components/ClubSection';
 
@@ -14,7 +14,8 @@ export default function Home() {
       <View style={styles.content}>
         <Sidebar />
         <ScrollView style={styles.mainContent}>
-          {/* <SearchBar /> */}
+          <Text style={styles.songTitle}>Midnight City - M83</Text>
+          <SearchBar />
           <GenreButtons />
           <Text style={styles.sectionTitle}>Discover Clubs For You</Text>
           <ClubSection title="We feature some of our matching venues in San Francisco. You can also check out some popular spots from the community." />
