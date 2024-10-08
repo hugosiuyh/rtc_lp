@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
   title: {
     ...globalStyles.text,
     fontSize: theme.fontSizes.medium,
-    fontFamily: theme.fonts.bold,
-    marginBottom: theme.spacing.small,
+    fontFamily: theme.fonts.medium,
+    marginBottom: theme.spacing.medium,
   },
   genreContainer: {
     flexDirection: 'row',

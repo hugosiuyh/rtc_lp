@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   },
   content: {
     justifyContent: 'center',
+    padding: '10%',
     flex: 1, // Ensures the content takes up the remaining space above the sign-out button
   },
   signOutButton: {
