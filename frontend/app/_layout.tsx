@@ -16,7 +16,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    AlternateGoth: require('../assets/fonts/AlternateGotNo1D.ttf'),
+    Montserrat_Regular: require('../assets/fonts/Montserrat-Regular.ttf'),
+    Montserrat_Light: require('../assets/fonts/Montserrat-Light.ttf'),
   });
 
   useEffect(() => {

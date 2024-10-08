@@ -12,7 +12,7 @@ export const theme = {
     inputBackground: 'rgba(255, 255, 255, 0.05)',
   },
   fonts: {
-    regular: 'System',
+    regular: 'Montserrat_Regular',
     medium: 'System-Medium',
     bold: 'System-Bold',
   },

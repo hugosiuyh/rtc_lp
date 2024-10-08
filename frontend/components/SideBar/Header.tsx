@@ -1,178 +1,78 @@
-// src/components/Header.js
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { theme, globalStyles } from '../../styles/theme';
 
-const Header = () => (
-  <View style={styles.container}>
-    <Image
-      source={require('@/assets/images/logo.png')}
-      style={styles.logo}
-    />
-    <Text style={styles.nowPlaying}>NOW PLAYING</Text>
-  </View>
-);
+const Header = () => {
+  const { width } = useWindowDimensions(); // Get the width of the screen
+
+  // Set a fixed fontSize for the text (or calculate it dynamically)
+  const fontSize = width * 0.02;
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('@/assets/images/logo.png')}
+          style={styles.logo} // Logo size is controlled by the container
+        />
+      </View>
+        <View style={styles.textContainer}>
+          <Text
+            style={[styles.nowPlaying, { fontSize }]} // Apply dynamic fontSize
+            numberOfLines={1} // Ensures the text stays on one line
+            ellipsizeMode="tail" // If the text overflows, it will add ellipsis (...)
+          >
+            ·
+          </Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text
+            style={[styles.nowPlaying, { fontSize }]} // Apply dynamic fontSize
+            numberOfLines={1} // Ensures the text stays on one line
+            ellipsizeMode="tail" // If the text overflows, it will add ellipsis (...)
+          >
+            NOW PLAYING
+          </Text>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
+    padding: '3%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: theme.spacing.medium,
+    justifyContent: 'left', // Space items evenly between logo and text
+    alignItems: 'center', // Center items vertically
+    width: '100%', // Full width of header
+    height: '6%', // Set header height relative to the screen
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.secondary,
   },
+  logoContainer: {
+    justifyContent: 'center', // Center logo vertically
+    alignItems: 'center', // Center logo horizontally
+    width: '10%', // Limit logo container width to 20% of the header width
+    height: '100%', // Take up the full height of the header
+  },
+  logo: {
+    width: '100%', // Limit the logo size to 80% of the logo container
+    height: '100%', // Maintain the aspect ratio by matching height to width
+    resizeMode: 'contain', // Ensure the logo scales within the container
+    maxWidth: 50, // Set a maximum width for the logo
+    maxHeight: 50, // Set a maximum height for the logo
+  },
+  textContainer: {
+    marginLeft: 15,
+    justifyContent: 'center', // Center text vertically
+    alignItems: 'center', // Center text horizontally
+    flexShrink: 1, // Allow text container to shrink if necessary
+    resizeMode: 'contain'
+  },
   nowPlaying: {
     ...globalStyles.text,
-    fontSize: theme.fontSizes.small,
-    color: theme.colors.textSecondary,
-  },
-  songTitle: {
-    ...globalStyles.text,
-    fontSize: theme.fontSizes.medium,
-    fontFamily: theme.fonts.bold,
-  },
-    logo: {
-    width: 120,
-    height: 40,
-    resizeMode: 'contain',
+    color: 'white',
   },
 });
 
 export default Header;
-
-// import React, { useState, useEffect } from 'react';
-// import { View, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-// import { useAuth } from '../context/AuthContext';
-// import { ThemedText } from '@/components/ThemedText';
-// import { useRouter } from 'expo-router';
-// import LoginScreen from '@/components/Login';
-
-// const Header: React.FC = () => {
-//   const { user } = useAuth();
-//   const router = useRouter();
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [isRouterReady, setIsRouterReady] = useState(false);
-
-//   useEffect(() => {
-//     if (router) {
-//       setIsRouterReady(true);
-//     }
-//   }, [router]);
-
-//   const handlePress = () => {
-//     if (isRouterReady) {
-//       console.log('Navigating to profile');
-//       router.push('/(tabs)/profile');
-//     }
-//   };
-
-//   return (
-//     <View>
-//       <View style={styles.header}>
-//         <Image
-//           source={require('@/assets/images/logo.png')}
-//           style={styles.logo}
-//         />
-//         {user ? (
-//           <TouchableOpacity
-//             style={styles.profileButton}
-//             onPress={handlePress} // Navigate to the profile screen
-//           >
-//             <ThemedText style={styles.profileButtonText}>Profile</ThemedText>
-//           </TouchableOpacity>
-//         ) : (
-//           <TouchableOpacity
-//             style={styles.loginButton}
-//             onPress={() => setModalVisible(true)} // Open the login modal
-//           >
-//             <ThemedText style={styles.loginButtonText}>Login</ThemedText>
-//           </TouchableOpacity>
-//         )}
-//       </View>
-
-//       {/* Modal for Login */}
-//       <Modal
-//         animationType="slide"
-//         transparent={true}
-//         visible={modalVisible}
-//         onRequestClose={() => {
-//           setModalVisible(!modalVisible);
-//         }}
-//       >
-//         <View style={styles.modalContainer}>
-//           <View style={styles.modalContent}>
-//             <LoginScreen setModalVisible={setModalVisible} /> {/* Pass setModalVisible as a prop */}
-//             <TouchableOpacity
-//               style={styles.closeButton}
-//               onPress={() => setModalVisible(!modalVisible)}
-//             >
-//               <ThemedText style={styles.buttonText}>Close</ThemedText>
-//             </TouchableOpacity>
-//           </View>
-//         </View>
-//       </Modal>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   header: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     padding: 16,
-//     backgroundColor: '#16213e',
-//   },
-//   logo: {
-//     width: 120,
-//     height: 40,
-//     resizeMode: 'contain',
-//   },
-//   loginButton: {
-//     backgroundColor: '#4a4e69',
-//     paddingVertical: 8,
-//     paddingHorizontal: 16,
-//     borderRadius: 20,
-//   },
-//   loginButtonText: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//   },
-//   profileButton: {
-//     backgroundColor: '#4a4e69',
-//     paddingVertical: 8,
-//     paddingHorizontal: 16,
-//     borderRadius: 20,
-//   },
-//   profileButtonText: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//   },
-//   // Modal styles
-//   modalContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-//   },
-//   modalContent: {
-//     width: '80%',
-//     backgroundColor: 'white',
-//     borderRadius: 10,
-//     padding: 20,
-//     alignItems: 'center',
-//   },
-//   closeButton: {
-//     backgroundColor: '#4a4e69',
-//     paddingVertical: 10,
-//     paddingHorizontal: 20,
-//     borderRadius: 5,
-//   },
-//   buttonText: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default Header;
