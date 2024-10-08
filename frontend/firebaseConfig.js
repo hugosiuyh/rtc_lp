@@ -5,9 +5,6 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
 // import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-
-// import { FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_APP_ID, FIREBASE_MEASUREMENT_ID } from '@env';
-
 const firebaseConfig = {
   apiKey: "AIzaSyC2mZz3yU7VnqwWTBHS0wN-ICb6vYqZ5jk",
   authDomain: "ratetheclub.firebaseapp.com",
