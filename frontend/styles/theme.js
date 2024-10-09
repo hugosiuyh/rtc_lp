@@ -12,9 +12,10 @@ export const theme = {
     inputBackground: 'rgba(255, 255, 255, 0.05)',
   },
   fonts: {
+    slim: 'Montserrat_Light',
     regular: 'Montserrat_Regular',
     medium: 'System-Medium',
-    bold: 'System-Bold',
+    bold: 'Montserrat_Bold',
   },
   fontSizes: {
     small: 12,

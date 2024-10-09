@@ -18,6 +18,7 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Montserrat_Regular: require('../assets/fonts/Montserrat-Regular.ttf'),
     Montserrat_Light: require('../assets/fonts/Montserrat-Light.ttf'),
+    Montserrat_Bold: require('../assets/fonts/Montserrat-Bold.ttf'),
   });
 
   useEffect(() => {

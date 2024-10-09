@@ -3,16 +3,16 @@ import { View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import { theme } from '../../styles/theme';
 
 const AvatarSection = () => {
-  const { width } = useWindowDimensions(); // Get screen width to calculate adaptive size
+  const { width, height } = useWindowDimensions(); // Get screen width and height
 
-  // Calculate the avatar size based on the screen width
-  const avatarSize = width * 0.12; // Avatar will be 30% of screen width, adjust as needed
+  // Calculate the avatar size based on the screen width, maintaining aspect ratio
+  const avatarSize = width * 0.25; // Adjust as needed, 25% of screen width in this case
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, { height: height * 0.2 }]}> {/* Dynamic height for container */}
       <Image
         source={require('../../assets/images/profile_photo.png')}
-        style={[styles.avatar, { width: avatarSize, height: avatarSize }]} // Set avatar size dynamically
+        style={[styles.avatar]} // Dynamic sizing and circular shape
       />
     </View>
   );
@@ -22,13 +22,9 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
-    width: '100%', // Full width of header
-    height: '10%', // Set header height relative to the screen
   },
   avatar: {
-    resizeMode: 'cover', // Ensure the image covers the given space while maintaining aspect ratio
-    borderRadius: 40, // Set borderRadius to a high number to make the image circular, dynamically adjusted
+    resizeMode: 'stretch', // Ensures the image fills the space while maintaining aspect ratio
   },
 });
 
