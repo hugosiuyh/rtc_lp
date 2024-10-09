@@ -9,31 +9,10 @@ import ClubSection from './ClubSection';
 import MusicHeader from './MusicHeader';
 
 export default function MainPage() {
-    const scrollX = useRef(new Animated.Value(0)).current;
-    const screenWidth = Dimensions.get('window').width;
-    const songTitleWidth = screenWidth * 3; // Scroll the width of 3 duplicated song titles
-
-    // Function to start the scroll animation
-    const animateScroll = () => {
-        scrollX.setValue(0); // Reset position to the start
-        Animated.loop(
-            Animated.timing(scrollX, {
-                toValue: -songTitleWidth, // Scroll the entire width of 3 duplicates
-                duration: 100000, // Duration of the scroll (adjust as necessary)
-                easing: Easing.linear, // Linear easing for smooth scrolling
-                useNativeDriver: true,
-            }),
-        ).start();
-    };
-
-    // Start animation once the component mounts
-    useEffect(() => {
-        animateScroll();
-    }, []);
-
     return (
         <SafeAreaView style={styles.container}>
             <MusicHeader/>
+            <View style = {styles.content}>
             <ScrollView style={styles.mainContent}>
                 <SearchBar />
                 <GenreButtons />
@@ -43,18 +22,28 @@ export default function MainPage() {
                 <ClubSection />
 
             </ScrollView>
+            </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        ...globalStyles.container,
-        flex: 1,
+        width: '70%', // Set the width of the sidebar
+        height: '100%', // Full height of the screen or parent container
+        backgroundColor: theme.colors.background,
+        borderRightWidth: 1,
+        borderRightColor: theme.colors.secondary,
+        flexDirection: 'column', // Arrange items vertically
+        justifyContent: 'space-between', // Pushes content to the top and the button to the bottom
     },
+    content: {
+        flex: 1,
+        padding: '10%',
+        justifyContent : 'center',
+        },
     mainContent: {
         flex: 1,
-        padding: '3%'
     },
     songTitleContainer: {
       padding: '3%',

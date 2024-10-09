@@ -40,7 +40,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: '3%',
+    padding: 5,
     flexDirection: 'row',
     justifyContent: 'left', // Space items evenly between logo and text
     alignItems: 'center', // Center items vertically
