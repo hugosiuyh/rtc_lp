@@ -143,8 +143,8 @@ const TopGenres = () => {
                 <LinearGradient
                   // Extended the gradient with multiple iterations of the colors
                   colors={['#00D4FF', '#FF7518', '#FF4500', '#00D4FF', '#FF7518', '#FF4500','#00D4FF']}
-                  start={{ x: 0, y: 2 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 4 }}
                   style={styles.gradient}
                 />
               </Animated.View>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   genreText: {
     ...globalStyles.text,
     fontSize: theme.fontSizes.small,
-    fontFamily: theme.fonts.regular,
+    fontFamily: theme.fonts.bold,
     color: 'black',
     zIndex: 1,
   },
