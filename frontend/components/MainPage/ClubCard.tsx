@@ -1,14 +1,14 @@
 // src/components/ClubCard.js
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { theme, globalStyles } from '../styles/theme';
+import { theme, globalStyles } from '../../styles/theme';
 
 const ClubCard = () => (
   <View style={styles.container}>
     <Text style={styles.time}>TODAY, 9:00PM</Text>
     <Text style={styles.name}>Temple</Text>
     <Image
-      source={require('../assets/images/bar.jpeg')}
+      source={require('../../assets/images/bar.jpeg')}
       style={styles.image}
     />
     <Text style={styles.info}>By Adam Tran, Christian, Shaun</Text>

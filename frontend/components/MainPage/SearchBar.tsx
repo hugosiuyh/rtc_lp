@@ -1,7 +1,7 @@
 // src/components/SearchBar.js
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-import { theme, globalStyles } from '../styles/theme';
+import { theme, globalStyles } from '../../styles/theme';
 
 const SearchBar = () => (
   <View style={styles.container}>

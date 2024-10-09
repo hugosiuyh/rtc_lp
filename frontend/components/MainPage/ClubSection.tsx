@@ -1,7 +1,7 @@
 // src/components/ClubSection.js
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { theme, globalStyles } from '../styles/theme';
+import { theme, globalStyles } from '../../styles/theme';
 import ClubCard from './ClubCard';
 
 const ClubSection = ({ title }) => (
